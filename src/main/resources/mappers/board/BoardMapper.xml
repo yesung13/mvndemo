@@ -1,24 +1,49 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.spring.springbootmybatisproject.board.repository.BoardMapper">
-    <!--
-        resultType에서 List 부분의 경우 List을 전달 하는 것이 아니라 결과 형(String, Map 등등)을 전달 하는것
-        출처: https://lahuman.jabsiri.co.kr/56 [lahuman & jabsiri 노트]
-     -->
+<mapper namespace="com.mvn.demo.board.repository.BoardDAO">
+	<!-- resultType에서 List 부분의 경우 List을 전달 하는 것이 아니라 결과 형(String, Map 등등)을 전달 하는것 출처: https://lahuman.jabsiri.co.kr/56 [lahuman
+		& jabsiri 노트] -->
 
 	<select id="selectBoardAllList" resultType="boardVO">
-		SELECT ROW_NUMBER() OVER(ORDER BY id DESC) no
-			, a.id
-			, a.user_id
-			, a.writer
-			, a.title
-			, a.content
-			, a.view_cnt
-			, a.reply_cnt
-			, a.board_type
-			, a.write_dt
-			, a.delyn
-		FROM tbl_board a
-		ORDER BY a.write_dt DESC, id DESC;
+		SELECT ROW_NUMBER() OVER(ORDER BY id DESC) as no, A.*
+		FROM (SELECT
+				  id
+				, user_id
+				, writer
+				, title
+				, content
+				, view_cnt
+				, reply_cnt
+				, board_type
+				, write_dt
+				, delyn
+				FROM tibero.TBL_BOARD) AS A
+		ORDER BY A.write_dt DESC, A.id DESC;
 	</select>
+
+	<select id="selectBoardDetail" parameterType="integer" resultType="boardVO">
+		SELECT *
+		FROM TIBERO.TBL_BOARD
+		WHERE ID = #{boardId};
+	</select>
+
+	<insert id="insertBoardWrite" parameterType="boardVO">
+
+		<selectKey keyProperty="id" resultType="integer" order="BEFORE">
+			SELECT tibero.TBL_BOARD_SEQ.nextval FROM DUAL;
+		</selectKey>
+
+		INSERT INTO tibero.TBL_BOARD (ID, USER_ID, WRITER, TITLE, CONTENT, BOARD_TYPE,READ_PERMISSION, WRITE_DT, MODIFY_DT, DELYN)
+		VALUES (
+				#{id}
+				, #{userId}
+				, #{writer}
+				, #{title}
+				, #{content}
+				, #{boardType}
+				, #{readPermission}
+				, sysdate
+				, sysdate
+				, #{delYn})
+	</insert>
 </mapper>

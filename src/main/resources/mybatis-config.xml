@@ -2,7 +2,20 @@
 <!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
 
 <configuration>
-    <typeAliases>
-		<typeAlias alias="boardVO" type="com.mvn.demo.board.model.BoardVO"/>
-    </typeAliases>
+	<!-- mapUnderscoreToCamelCase -->
+	<!-- callSettersOnNulls : 쿼리 결과 필드가 null인 경우, 누락이 되서 나오는데 누락이 안되게 하는 설정 -->
+	<!-- jdbcTypeForNull : 쿼리에 보내는 파라메터가 null인 경우, 오류 발생하는 것 방지 예) #{search.user} -->
+	<settings>
+		<setting name="mapUnderscoreToCamelCase" value="true" />
+		<setting name="callSettersOnNulls" value="true" />
+		<setting name="jdbcTypeForNull" value="NULL" />
+	</settings>
+
+
+	<typeAliases>
+		<!-- <package name="com.mvn.demo.board.model" /> -->
+		<typeAlias alias="boardVO" type="com.mvn.demo.board.model.BoardVO" />
+		<typeAlias alias="userVO" type="com.mvn.demo.user.model.UserVO" />
+	</typeAliases>
+
 </configuration>

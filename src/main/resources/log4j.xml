@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE log4j:configuration PUBLIC "-//APACHE//DTD LOG4J 1.2//EN" "log4j.dtd">
+<!-- <!DOCTYPE log4j:configuration PUBLIC "-//APACHE//DTD LOG4J 1.2//EN" "log4j.dtd"> -->
+<!DOCTYPE log4j:configuration SYSTEM "http://logging.apache.org/log4j/1.2/apidocs/org/apache/log4j/xml/doc-files/log4j.dtd">
 <log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
 
 	<!-- Appenders -->
@@ -9,21 +10,21 @@
 			<param name="ConversionPattern" value="%-5p: %c - %m%n" />
 		</layout>
 	</appender>
-	
+
 	<!-- Application Loggers -->
 	<logger name="com.mvn.demo">
 		<level value="info" />
 	</logger>
-	
+
 	<!-- 3rdparty Loggers -->
 	<logger name="org.springframework.core">
 		<level value="info" />
 	</logger>
-	
+
 	<logger name="org.springframework.beans">
 		<level value="info" />
 	</logger>
-	
+
 	<logger name="org.springframework.context">
 		<level value="info" />
 	</logger>
@@ -32,10 +33,41 @@
 		<level value="info" />
 	</logger>
 
+	<!-- log4jdbc -->
+	<!-- SQL문만 로깅, PreparedStatement일 경우 관련된 argument 값으로 대체된 SQL문 출력 -->
+    <logger name="jdbc.sqlonly">
+        <level value="debug"/>
+    </logger>
+
+    <!-- SQL문과 수행 시간 정보(milliseconds) 포함 -->
+    <logger name="jdbc.sqltiming">
+        <level value="off"/>
+    </logger>
+
+    <!-- ResultSet을 포함한 모든 JDBC 호출 정보 로깅. 로그양이 많음 -->
+    <logger name="jdbc.resultset">
+        <level value="off"/>
+    </logger>
+
+    <!-- SQL 결과를 table 형태로 로깅 -->
+    <logger name="jdbc.resultsettable">
+        <level value="debug"/>
+    </logger>
+
+    <!-- ResultSet을 제외한 모든 JDBC 호출 정보 로깅. JDBC 문제를 추적해야 할 필요가 있는 경우에만 사용 -->
+    <logger name="jdbc.audit">
+        <level value="off"/>
+    </logger>
+
+    <!-- Connection의 연결과 종료에 관련된 로깅. 메모리 누수 확인? -->
+    <logger name="jdbc.connection">
+        <level value="off"/>
+    </logger>
+
 	<!-- Root Logger -->
 	<root>
 		<priority value="warn" />
 		<appender-ref ref="console" />
 	</root>
-	
+
 </log4j:configuration>

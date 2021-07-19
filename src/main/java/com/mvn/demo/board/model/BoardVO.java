@@ -5,6 +5,9 @@ import org.apache.ibatis.type.Alias;
 @Alias("boardVO")
 public class BoardVO {
 
+	// 글 순번
+	private int no;
+
 	// 글 index
 	private int id;
 
@@ -21,13 +24,16 @@ public class BoardVO {
 	private String content;
 
 	// 글 조회수
-	private Long viewCnt;
+	private int viewCnt;
 
 	// 글 댓글수
-	private Long replyCnt;
+	private int replyCnt;
 
 	// 글 타입(공지사항: N, QnA: Q)
 	private String boardType;
+
+	// 읽기 권한(일반 사용자:U, 관리자:A, 매니저:M, 협력사:P)
+	private String readPermission;
 
 	// 글 등록일
 	private String writeDt;
@@ -38,8 +44,15 @@ public class BoardVO {
 	// 글 삭제 여부
 	private String delYn;
 
-
 	// Getter & Setter
+	public int getNo() {
+		return no;
+	}
+
+	public void setNo(int no) {
+		this.no = no;
+	}
+
 	public int getId() {
 		return id;
 	}
@@ -80,19 +93,19 @@ public class BoardVO {
 		this.content = content;
 	}
 
-	public Long getViewCnt() {
+	public int getViewCnt() {
 		return viewCnt;
 	}
 
-	public void setViewCnt(Long viewCnt) {
+	public void setViewCnt(int viewCnt) {
 		this.viewCnt = viewCnt;
 	}
 
-	public Long getReplyCnt() {
+	public int getReplyCnt() {
 		return replyCnt;
 	}
 
-	public void setReplyCnt(Long replyCnt) {
+	public void setReplyCnt(int replyCnt) {
 		this.replyCnt = replyCnt;
 	}
 
@@ -102,6 +115,14 @@ public class BoardVO {
 
 	public void setBoardType(String boardType) {
 		this.boardType = boardType;
+	}
+
+	public String getReadPermission() {
+		return readPermission;
+	}
+
+	public void setReadPermission(String readPermisstion) {
+		this.readPermission = readPermisstion;
 	}
 
 	public String getWriteDt() {
@@ -128,25 +149,12 @@ public class BoardVO {
 		this.delYn = delYn;
 	}
 
-	public BoardVO(int id, int userId, String writer, String title, String content, Long viewCnt,
-			Long replyCnt, String boardType, String writeDt, String modifyDt, String delYn) {
-		super();
-		this.id = id;
-		this.userId = userId;
-		this.writer = writer;
-		this.title = title;
-		this.content = content;
-		this.viewCnt = viewCnt;
-		this.replyCnt = replyCnt;
-		this.boardType = boardType;
-		this.writeDt = writeDt;
-		this.modifyDt = modifyDt;
-		this.delYn = delYn;
+	@Override
+	public String toString() {
+		return "BoardVO [no=" + no + ", id=" + id + ", userId=" + userId + ", writer=" + writer + ", title=" + title
+				+ ", content=" + content + ", viewCnt=" + viewCnt + ", replyCnt=" + replyCnt + ", boardType="
+				+ boardType + ", readPermisstion=" + readPermission + ", writeDt=" + writeDt + ", modifyDt=" + modifyDt
+				+ ", delYn=" + delYn + "]";
 	}
-
-
-
-
-
 
 }

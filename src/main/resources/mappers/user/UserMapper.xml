@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mvn.demo.user.repository.UserDAO">
+	<!-- resultType에서 List 부분의 경우 List을 전달 하는 것이 아니라 결과 형(String, Map 등등)을 전달 하는것 출처: https://lahuman.jabsiri.co.kr/56 [lahuman
+		& jabsiri 노트] -->
+
+	<select id="selectUserAccount" parameterType="com.mvn.demo.user.model.LoginDTO" resultType="userVO">
+		SELECT *
+		FROM tibero.tbl_user
+        WHERE user_account = #{userAccount};
+	</select>
+</mapper>

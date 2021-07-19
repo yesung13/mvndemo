@@ -1,36 +1,59 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<beans:beans
+<beans:beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:beans="http://www.springframework.org/schema/beans" xmlns:context="http://www.springframework.org/schema/context"
 	xmlns="http://www.springframework.org/schema/mvc"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns:beans="http://www.springframework.org/schema/beans"
-	xmlns:context="http://www.springframework.org/schema/context"
 	xsi:schemaLocation="http://www.springframework.org/schema/mvc https://www.springframework.org/schema/mvc/spring-mvc.xsd
 		http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd">
 
 	<!-- *웹과 관련된 스프링 설정 파일* -->
-
-	<!-- DispatcherServlet Context: defines this servlet's request-processing
-		infrastructure -->
+	<!-- DispatcherServlet Context: defines this servlet's request-processing infrastructure -->
 
 	<!-- java 어노테이션 문법을 해석하게 하는 코드(기본으로 등록됨) -->
 	<annotation-driven />
-
-	<!-- Handles HTTP GET requests for /resources/** by efficiently serving
-		up static resources in the ${webappRoot}/resources directory -->
+	<!-- Handles HTTP GET requests for /resources/** by efficiently serving up static resources in the ${webappRoot}/resources
+		directory -->
 	<resources mapping="/resources/**" location="/resources/" />
+	<resources mapping="/favicon.ico" location="/favicon.ico" />
 
-	<!-- Resolves views selected for rendering by @Controllers to .jsp resources
-		in the /WEB-INF/views directory -->
-	<beans:bean
-		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+	<!-- Resolves views selected for rendering by @Controllers to .jsp resources in the /WEB-INF/views directory -->
+	<beans:bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 		<beans:property name="prefix" value="/WEB-INF/views/" />
 		<beans:property name="suffix" value=".jsp" />
+		<beans:property name="order" value="1" />
 	</beans:bean>
+
+	<!-- beanNameResolver는 우선순위를 0으로 해서 ViewPage를 찾을 때 우선 탐색한다. 만약 BeanNameViewResolver에서 없으면 viewResolver에서 탐색한다. -->
+	<beans:bean id="beanNameViewResolver" class="org.springframework.web.servlet.view.BeanNameViewResolver">
+		<beans:property name="order" value="0" />
+	</beans:bean>
+
+	<beans:bean id="excelDownloadView" class="com.mvn.demo.util.ExcelDownloadView" />
+
+	<beans:bean id="jsonView" class="org.springframework.web.servlet.view.json.MappingJackson2JsonView" />
+
+	<beans:bean id="multipartResolver"
+		class="org.springframework.web.multipart.commons.CommonsMultipartResolver" />
+
+	<!-- 컨트롤러에서 넘겨주는 데이터를 messageConverter로 사용하기 위한 MappingJackson2HttpMessageConverter 추가. HTTP 요청 / 응답 body를 변환하는 역할 -->
+	<beans:bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter" />
+
+
+	<!-- interceptor -->
+	<beans:bean id="interceptor" class="com.mvn.demo.util.interceptor.AuthCheckInterceptor"></beans:bean>
+
+	<interceptors>
+		<interceptor>
+			<mapping path="/board/**" /> <!-- 특정 controller만 처리하려면 path 추가하면 된다. -->
+			<exclude-mapping path="/resources/**"/> <!-- interceptor 적용 예외 URL -->
+			<exclude-mapping path="/account/login"/> <!-- interceptor 적용 예외 URL -->
+			<beans:ref bean="interceptor" />
+		</interceptor>
+	</interceptors>
 
 
 	<!-- 객체를 주입할때 이하의 패키지에서 검색하기 위함 -->
-	<context:component-scan	base-package="com.mvn.demo" />
+	<context:component-scan base-package="com.mvn.demo" />
 
 
 
