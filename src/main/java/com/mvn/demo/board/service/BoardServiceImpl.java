@@ -2,6 +2,7 @@ package com.mvn.demo.board.service;
 
 import java.util.List;
 
+import org.apache.commons.text.StringEscapeUtils;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.streaming.SXSSFSheet;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import com.mvn.demo.board.model.BoardVO;
 import com.mvn.demo.board.repository.BoardDAO;
+
 
 @Service
 
@@ -101,7 +103,16 @@ public class BoardServiceImpl implements BoardService {
 	@Override
 	public BoardVO getBoardDetail(int boardId) {
 		// TODO Auto-generated method stub
-		return boardDAO.selectBoardDetail(boardId);
+		BoardVO result = boardDAO.selectBoardDetail(boardId);
+
+		// DB에 저장된 Html 특수문자 치환
+		String originCont = StringEscapeUtils.unescapeHtml4(result.getContent());
+
+		log.info("html unescape::{}", originCont);
+
+		result.setContent(originCont);
+
+		return result;
 	}
 
 	@Override
