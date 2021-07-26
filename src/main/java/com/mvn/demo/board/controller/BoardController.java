@@ -2,6 +2,7 @@ package com.mvn.demo.board.controller;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -152,9 +153,14 @@ public class BoardController {
 
 		log.info("boardId", boardId);
 
-		BoardVO boardVORes = boardService.getBoardDetail(boardId);
+		BoardVO boardVORes = null;
+		try {
+			boardVORes = boardService.getBoardDetail(boardId);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 
-		log.info("boardDetail controller: ",boardVORes);
+		log.info("boardDetail controller: {}",boardVORes);
 
 		model.addAttribute("boardDetail", boardVORes);
 
@@ -191,16 +197,6 @@ public class BoardController {
 
 		log.info("====================");
 		log.info("register:" + boardVO);
-		//		if (boardVO.getAttachList() != null) {
-		//			boardVO.getAttachList().forEach(attachVO -> log.info(String.valueOf(attachVO)));
-		//			// 위 람다식과 같은 코드
-		//			//            List<BoardAttachVO> boardAttachVOS = boardVO.getAttachList();
-		//			//            for(BoardAttachVO attachVO : boardAttachVOS) {
-		//			//                log.info(String.valueOf(attachVO));
-		//			//                if(attachVO)
-		//			//            }
-		//
-		//		}
 		log.info("====================");
 
 		try {
@@ -227,7 +223,7 @@ public class BoardController {
 	 * @return
 	 */
 	@RequestMapping(value = "/modify", method = RequestMethod.GET)
-	public String boardUpdatePage(@RequestParam(value = "id") Integer boardId, Model model) {
+	public String boardUpdatePage(@RequestParam(value = "id") Integer boardId, Model model) throws IOException {
 		BoardVO boardVO = boardService.getBoardDetail(boardId);
 		model.addAttribute("boardListDetail", boardVO);
 

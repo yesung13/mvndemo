@@ -1,5 +1,6 @@
 package com.mvn.demo.board.service;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
@@ -16,10 +17,10 @@ public interface BoardService {
 	public SXSSFWorkbook excelFileDownloadProcess(List<BoardVO> list);
 
 
-	public BoardVO getBoardDetail(int boardId);
+	public BoardVO getBoardDetail(int boardId) throws IOException;
 
 
-	public void register(BoardVO boardVO);
+	public void register(BoardVO boardVO) throws IOException;
 
 
 	public boolean modify(BoardVO boardVO);

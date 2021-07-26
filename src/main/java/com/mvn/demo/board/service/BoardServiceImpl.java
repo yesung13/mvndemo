@@ -1,6 +1,12 @@
 package com.mvn.demo.board.service;
 
-import java.util.List;
+import java.io.*;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 import org.apache.commons.text.StringEscapeUtils;
 import org.apache.poi.ss.usermodel.Cell;
@@ -75,7 +81,7 @@ public class BoardServiceImpl implements BoardService {
 		headerCell = headerRow.createCell(3);
 		headerCell.setCellValue("작성자");
 
-		// 과일표 내용 행 및 셀 생성
+		// 엑셀표 내용 행 및 셀 생성
 		Row bodyRow = null;
 		Cell bodyCell = null;
 		for (int i = 0; i < list.size(); i++) {
@@ -101,23 +107,39 @@ public class BoardServiceImpl implements BoardService {
 	}
 
 	@Override
-	public BoardVO getBoardDetail(int boardId) {
-		// TODO Auto-generated method stub
+	public BoardVO getBoardDetail(int boardId) throws IOException{
 		BoardVO result = boardDAO.selectBoardDetail(boardId);
 
+//		BufferedReader rd = new BufferedReader(new FileReader(result.getContent()));
+//
+//		String str;
+//		for (int i = 1; (str = rd.readLine()) != null; i++) {
+//			System.out.println(str);
+//			result.setContent(str);
+//			log.info(result.toString());
+//		}
+//		rd.close();
+
 		// DB에 저장된 Html 특수문자 치환
-		String originCont = StringEscapeUtils.unescapeHtml4(result.getContent());
+//		String originCont = StringEscapeUtils.unescapeHtml4(result.getContent());
+//
+//		log.info("html unescape::{}", originCont);
+//
+//		result.setContent(originCont);
 
-		log.info("html unescape::{}", originCont);
-
-		result.setContent(originCont);
+		List<String> lines = Files.readAllLines(Paths.get(result.getContent()));
+		System.out.println(lines);
+//		result.setContent(lines);
 
 		return result;
 	}
 
 	@Override
-	public void register(BoardVO boardVO) {
+	public void register(BoardVO boardVO) throws IOException{
 
+		// Html 특수문자로 치환
+//		String transCont = StringEscapeUtils.escapeHtml4(boardVO.getContent());
+//		boardVO.setContent(transCont);
 		boardVO.setBoardType("Q");
 		boardVO.setDelYn("N");
 
@@ -125,12 +147,51 @@ public class BoardServiceImpl implements BoardService {
 		log.info("register service:" + boardVO);
 		log.info("====================");
 
-		boardDAO.insertBoardWrite(boardVO);
+		try {
+
+			SimpleDateFormat simpleDate = new SimpleDateFormat("yyyyMMDD");
+			Date time = new Date();
+
+			String toDay = simpleDate.format(time);
+			Date selectDate = simpleDate.parse(toDay);
+			Calendar cal = new GregorianCalendar(Locale.KOREA);
+			cal.setTime(selectDate);
+			toDay = simpleDate.format(cal.getTime());
+
+			String txt = boardVO.getContent();
+
+			String filePath = "C:\\htmlContents\\";
+			String filePull = filePath + toDay + ".html";
+
+			// make folder ------
+			File uploadPath = new File(filePath, filePull); // File(파일경로, 파일이름)
+
+			// 파일 경로가 없을 경우
+			if (uploadPath.exists() == false) {
+				uploadPath.mkdirs();
+			}
+			//make yyyy/MM/dd folder
+
+			BufferedWriter fw = new BufferedWriter(new FileWriter(filePull, false));
+
+			fw.write(txt);
+			fw.flush();
+			fw.close();
+
+			log.info("===html 파일 저장 완료===");
+
+			boardVO.setContent(filePull);
+
+			boardDAO.insertBoardWrite(boardVO);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+
 	}
 
 	@Override
 	public boolean modify(BoardVO boardVO) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
