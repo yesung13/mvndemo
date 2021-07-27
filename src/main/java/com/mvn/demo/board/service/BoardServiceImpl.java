@@ -158,6 +158,16 @@ public class BoardServiceImpl implements BoardService {
         return result;
     }
 
+    // content 저장 시 파일명 날짜로 생성
+    private String mkFileName() {
+        SimpleDateFormat simpleDate = new SimpleDateFormat("yyyyMMdd");
+        Date time = new Date();
+
+        String toDay = simpleDate.format(time);
+
+        return toDay;
+    }
+
     @Override
     public void register(BoardVO boardVO) throws IOException {
 
@@ -171,33 +181,31 @@ public class BoardServiceImpl implements BoardService {
         log.info("register service:" + boardVO);
         log.info("====================");
 
+        UUID uuid = UUID.randomUUID();
+
         try {
-
-            SimpleDateFormat simpleDate = new SimpleDateFormat("yyyyMMDD");
-            Date time = new Date();
-
-            String toDay = simpleDate.format(time);
-            Date selectDate = simpleDate.parse(toDay);
-            Calendar cal = new GregorianCalendar(Locale.KOREA);
-            cal.setTime(selectDate);
-            toDay = simpleDate.format(cal.getTime());
-
             String txt = boardVO.getContent();
 
-            String filePath = "C:\\htmlContents\\";
-            String filePull = filePath + toDay + ".html";
+            //            String filePath = "C:\\htmlContents\\";
+            //            String filePull = filePath + toDay + ".html";
+
+            String htmlFolderPath = "C:\\htmlContents\\";
+            String htmlFilePath = htmlFolderPath + uuid.toString() + "_" + mkFileName() + ".html";
 
             // make folder ------
-            File uploadPath = new File(filePath, filePull); // File(파일경로, 파일이름)
+            File htmlPath = new File(htmlFolderPath, htmlFilePath); // File(파일경로, 파일이름)
 
             // 파일 경로가 없을 경우
-            if (uploadPath.exists() == false) {
-                uploadPath.mkdirs();
+            if (htmlPath.exists() == false) {
+                htmlPath.mkdirs();
             }
             //make yyyy/MM/dd folder
 
-//            BufferedWriter bw = new BufferedWriter(new FileWriter(filePull, false));
-            BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(filePull, true), StandardCharsets.UTF_8));
+            String htmlFileName = uuid.toString() + "_" + mkFileName() + ".html";
+
+            log.info("htmlFileName===={}", htmlFileName);
+
+            BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(htmlFilePath, true), StandardCharsets.UTF_8));
 
             bw.write(txt);
             bw.flush();
@@ -205,7 +213,7 @@ public class BoardServiceImpl implements BoardService {
 
             log.info("===html 파일 저장 완료===");
 
-            boardVO.setContent(filePull);
+            boardVO.setContent(htmlFilePath);
 
             boardDAO.insertBoardWrite(boardVO);
         } catch (Exception e) {

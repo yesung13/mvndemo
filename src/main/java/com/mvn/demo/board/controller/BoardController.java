@@ -1,8 +1,14 @@
 package com.mvn.demo.board.controller;
 
 import java.io.BufferedWriter;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -10,6 +16,11 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+
+import javax.servlet.ServletException;
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.slf4j.Logger;
@@ -22,6 +33,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.mvn.demo.SFV;
 import com.mvn.demo.board.model.BoardVO;
@@ -261,6 +273,67 @@ public class BoardController {
 
 		return result;
 	}
+	
+	
+	@RequestMapping(value="/community/imageUpload", method = RequestMethod.POST )
+	 public void communityImageUpload(HttpServletRequest request, HttpServletResponse response, @RequestParam MultipartFile upload) {
+		 
+		System.out.println("여기까지?");
+       OutputStream out = null;
+       PrintWriter printWriter = null;
+       response.setCharacterEncoding("utf-8");
+       response.setContentType("text/html;charset=utf-8");
+
+       try{
+
+           String fileName = upload.getOriginalFilename();
+           byte[] bytes = upload.getBytes();
+           System.out.println(request.getServletPath());
+           String uploadPath = request.getServletContext().getRealPath("/img");
+           File uploadFile = new File(uploadPath);
+           if(!uploadFile.exists()) {
+        	   uploadFile.mkdir();
+           }
+           
+           System.out.println(uploadPath);
+           
+          // fileName = UUID.randomUUID().toString();
+           uploadPath = uploadPath+ "/"+ fileName;
+           out = new FileOutputStream(new File(uploadPath));
+           out.write(bytes);
+           
+           String callback = request.getParameter("CKEditorFuncNum");
+
+           printWriter = response.getWriter();
+           
+           String fileUrl = request.getContextPath() + "/img/" + fileName;
+           printWriter.println("<script type='text/javascript'>window.parent.CKEDITOR.tools.callFunction("
+                   + callback
+                   + ",'"
+                   + fileUrl
+                   + "','이미지를 업로드 하였습니다.'"
+                   + ")</script>");
+        
+           printWriter.flush();
+
+       }catch(IOException e){
+           e.printStackTrace();
+       } finally {
+           try {
+               if (out != null) {
+                   out.close();
+               }
+               if (printWriter != null) {
+                   printWriter.close();
+               }
+           } catch (IOException e) {
+               e.printStackTrace();
+           }
+       }
+
+       return;
+       }	
+	
 
 	/**
 	 * 게시글 삭제

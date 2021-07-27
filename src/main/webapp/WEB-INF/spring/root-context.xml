@@ -25,13 +25,12 @@
 
   <!-- Tibero DB Connection - log4jdbc 적용 -->
   <!-- local -->
-	<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
-		<property name="driverClassName" value="net.sf.log4jdbc.sql.jdbcapi.DriverSpy" />
-		<property name="url" value="jdbc:log4jdbc:tibero:thin:@localhost:8629:tibero" />
-		<property name="username" value="sys" />
-		<property name="password" value="test" />
-	</bean>
-
+  <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+    <property name="driverClassName" value="net.sf.log4jdbc.sql.jdbcapi.DriverSpy" />
+    <property name="url" value="jdbc:log4jdbc:tibero:thin:@localhost:8629:tibero" />
+    <property name="username" value="sys" />
+    <property name="password" value="test" />
+  </bean>
 
   <!-- Spring과 Mybatis 연동 설정 -->
   <!-- 마이바티스를 사용하면, SqlSessionFactory는 SqlSessionFactoryBuilder를 사용해서 생성한다. 마이바티스 스프링 연동 모듈에서는, SqlSessionFactoryBean가 대신
