@@ -89,22 +89,22 @@
     </style>
     <script type="text/javascript">
         $(document).ready(function () {
+            //해당 이름으로 된 textarea에 에디터를 적용
+            CKEDITOR.replace('content', {
+                filebrowserImageUploadUrl: '/board/community/imageUpload' //여기 경로로 파일을 전달하여 업로드 시킨다.
+            });
 
-    			CKEDITOR.replace( 'content', {//해당 이름으로 된 textarea에 에디터를 적용
-    			 filebrowserImageUploadUrl: '/board/community/imageUpload' //여기 경로로 파일을 전달하여 업로드 시킨다.
-    	        });
-	         
-	        CKEDITOR.on('dialogDefinition', function( ev ){
-	            var dialogName = ev.data.name;
-	            var dialogDefinition = ev.data.definition;
-	            switch (dialogName) {
-	                case 'image': //Image Properties dialog
-	                    //dialogDefinition.removeContents('info');
-	                    dialogDefinition.removeContents('Link');
-	                    dialogDefinition.removeContents('advanced');
-	                    break;
-	            }
-	        });
+            CKEDITOR.on('dialogDefinition', function (ev) {
+                var dialogName = ev.data.name;
+                var dialogDefinition = ev.data.definition;
+                switch (dialogName) {
+                    case 'image': //Image Properties dialog
+                        //dialogDefinition.removeContents('info');
+                        dialogDefinition.removeContents('Link');
+                        dialogDefinition.removeContents('advanced');
+                        break;
+                }
+            });
 
             $('#write_btn').click(function () {
                 writeCheck_btn();
@@ -152,7 +152,6 @@
             data.append('content', CKEDITOR.instances.content.getData());
             data.append('readPermission', $("input[name='readPermission']").val());
             // data.append('file', $('#file')[0].files[0]);
-
 
 
             console.log("Insert Request Data:", data);
