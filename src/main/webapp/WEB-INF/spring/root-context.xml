@@ -1,64 +1,57 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xmlns:jdbc="http://www.springframework.org/schema/jdbc"
-  xmlns:mybatis-spring="http://mybatis.org/schema/mybatis-spring" xmlns:tx="http://www.springframework.org/schema/tx"
-  xmlns:context="http://www.springframework.org/schema/context"
-  xsi:schemaLocation="http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-4.1.xsd
-		http://mybatis.org/schema/mybatis-spring http://mybatis.org/schema/mybatis-spring-1.2.xsd
+       xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-4.1.xsd
+
 		http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.1.xsd
 		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.1.xsd">
 
-  <!-- *스프링 MVC 설정 파일* -->
+    <!-- *스프링 MVC 설정 파일* -->
 
-  <!-- Root Context: defines shared resources visible to all other web components -->
-  <context:annotation-config></context:annotation-config>
+    <!-- Root Context: defines shared resources visible to all other web components -->
+    <context:annotation-config></context:annotation-config>
 
-  <!-- properties 파일 로딩 -->
-  <!-- <context:property-placeholder location="classpath:/위치"/> -->
+    <!-- properties 파일 로딩 -->
+    <!-- <context:property-placeholder location="classpath:/위치"/> -->
 
-  <!-- Tibero DB Connection -->
-  <!-- <bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource" destroy-method="close"> <property name="driverClassName"
-    value="com.tmax.tibero.jdbc.TbDriver" /> <property name="url" value="jdbc:tibero:thin:@localhost:8629:tibero" /> <property
-    name="username" value="sys" /> <property name="password" value="test" /> </bean> -->
+    <!-- local -->
+    <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <property name="driverClassName" value="net.sf.log4jdbc.sql.jdbcapi.DriverSpy"/>
+        <property name="url" value="jdbc:oracle:thin:@localhost:59161:XE"/>
+        <property name="username" value="MGR"/>
+        <property name="password" value="dlatl001"/>
+    </bean>
 
+    <!-- Spring과 Mybatis 연동 설정 -->
+    <!-- 마이바티스를 사용하면, SqlSessionFactory는 SqlSessionFactoryBuilder를 사용해서 생성한다. 마이바티스 스프링 연동 모듈에서는, SqlSessionFactoryBean가 대신
+      사용된다. -->
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="configLocation" value="classpath:/mybatis-config.xml"/>
+        <!-- mapper 경로 -->
+        <property name="mapperLocations" value="classpath:/mappers/**/*Mapper.xml"/>
+    </bean>
 
-  <!-- Tibero DB Connection - log4jdbc 적용 -->
-  <!-- local -->
-  <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
-    <property name="driverClassName" value="net.sf.log4jdbc.sql.jdbcapi.DriverSpy" />
-    <property name="url" value="jdbc:log4jdbc:tibero:thin:@localhost:8629:tibero" />
-    <property name="username" value="sys" />
-    <property name="password" value="test" />
-  </bean>
+    <bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate" destroy-method="clearCache">
+        <constructor-arg ref="sqlSessionFactory"/>
+    </bean>
 
-  <!-- Spring과 Mybatis 연동 설정 -->
-  <!-- 마이바티스를 사용하면, SqlSessionFactory는 SqlSessionFactoryBuilder를 사용해서 생성한다. 마이바티스 스프링 연동 모듈에서는, SqlSessionFactoryBean가 대신
-    사용된다. -->
-  <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
-    <property name="dataSource" ref="dataSource" />
-    <property name="configLocation" value="classpath:/mybatis-config.xml" />
-    <!-- mapper 경로 -->
-    <property name="mapperLocations" value="classpath:/mappers/**/*Mapper.xml" />
-  </bean>
-
-  <bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate" destroy-method="clearCache">
-    <constructor-arg name="sqlSessionFactory" ref="sqlSessionFactory"></constructor-arg>
-  </bean>
-
-  <!-- Transaction -->
-  <!-- 혹시나 자동으로 정보를 입력하다가 오류가 발생했을때 롤백을 하기위해서 설정한 것이다. DAO파일에 어노테이션으로 @Transactional를 선언해주면 된다. (오토 커밋 설정일때는 의미가 없다.! 오토커밋이
-    아닐경우 가능하다.) -->
-  <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
-    <property name="dataSource" ref="dataSource" />
+    <!-- Transaction -->
+    <!-- 혹시나 자동으로 정보를 입력하다가 오류가 발생했을때 롤백을 하기위해서 설정한 것이다. DAO파일에 어노테이션으로 @Transactional를 선언해주면 된다. (오토 커밋 설정일때는 의미가 없다.! 오토커밋이
+      아닐경우 가능하다.) -->
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"/>
 
 
-  </bean>
+    </bean>
 
-  <!-- aop의 around로 동작을 한다. -->
-  <tx:annotation-driven transaction-manager="transactionManager" />
+    <!-- aop의 around로 동작을 한다. -->
+    <tx:annotation-driven transaction-manager="transactionManager"/>
 
-  <!-- 자동주입 명령을 사용하기 위해 위치 설정 -->
-  <context:component-scan base-package="com.mvn.demo" />
+    <!-- 자동주입 명령을 사용하기 위해 위치 설정 -->
+    <context:component-scan base-package="com.mvn.demo"/>
 
 </beans>

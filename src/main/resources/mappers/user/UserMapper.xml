@@ -6,7 +6,7 @@
 
 	<select id="selectUserAccount" parameterType="com.mvn.demo.user.model.LoginDTO" resultType="userVO">
 		SELECT *
-		FROM tibero.tbl_user
-        WHERE user_account = #{userAccount};
+		FROM tbl_user
+        WHERE user_account = #{userAccount}
 	</select>
 </mapper>
