@@ -74,130 +74,130 @@
                     location.href = "/board/modify?id=" + boardId;
                 }
             });
-            //  $('#delete_btn').click(function () {
-            //     if (confirm("게시글을 삭제 하시겠습니까?")) {
-            //         var requestUrl = '/board/delete';
-            //         var data = {}
-            //         data.id = boardId;
-            //         data = JSON.stringify(data);
-            //         $.ajax({
-            //             type: 'post',
-            //             url: requestUrl,
-            //             data: data,
-            //             dataType: 'json',
-            //             contentType: 'application/json',
-            //             success: function (res) {
-            //                 console.log("Response Data:", res);
-            //                 if (res.resCode === 604) {
-            //                     alert(res.resMsg);
-            //                     location.replace('/board/list');
-            //                 } else if (res.resCode === 605) {
-            //                     alert(res.resMsg);
-            //                     location.reload();
-            //                 }
-			//
-			//
-            //             }, error: function (xhr, e, data) {
-            //                 console.log("Response Error", data);
-            //                 alert("에러!!");
-            //                 window.location.reload(true); // 캐시 제거 후 새 파일 로드 HTTP 200
-            //             }
-            //         });
-            //     }
-            // });
-            // $('#replyWrite_btn').click(function () {
-            //     // 댓글 유효성 검사
-            //     let replyContent = $('#replyContent').val();
-            //     if (replyContent == null || replyContent === "") {
-            //         alert("댓글을 입력하세요");
-            //         return false;
-            //     }
-            //     return replyWrite_btn();
-            // });
-			//
-            // //추가
-            // // jquery.getJSON(url, data, success) => ajax 간단하게 표현
-            // $.getJSON("/board/getAttachList", {boardId: boardId}, function (arr) {
-			//
-            //     console.log("arr: ", arr);
-            //     console.log("arr: ", arr.length);
-			//
-            //     let str = "";
-            //     if (arr.length > 0) {
-            //         $(arr).each(function (i, attach) {
-			//
-            //             //image type
-            //             if (attach.fileType) {
-            //                 let fileCallPath = encodeURIComponent(attach.uploadPath + "/s_" + attach.uuid + "_" + attach.fileName);
-			//
-            //                 str += "<li data-path='" + attach.uploadPath + "' data-uuid='" + attach.uuid + "' data-filename='" + attach.fileName + "' data-type='" + attach.fileType + "' ><div>";
-            //                 str += "<img class='rounded' src='/board/display?fileName=" + fileCallPath + "'>";
-            //                 str += "</div>";
-            //                 str += "</li>";
-            //             } else {
-			//
-            //                 str += "<li data-path='" + attach.uploadPath + "' data-uuid='" + attach.uuid + "' data-filename='" + attach.fileName + "' data-type='" + attach.fileType + "' ><div>";
-            //                 str += "<span> " + attach.fileName + "</span><br/>";
-            //                 str += "<img src='/resources/images/attach.png'></a>";
-            //                 str += "</div>";
-            //                 str += "</li>";
-            //             }
-            //         });
-			//
-            //         $(".uploadResult ul").html(str);
-            //     } else {
-            //         str += "<span style='color: #A6A6A6'>첨부된 파일이 없습니다.</span>"
-			//
-            //         $(".uploadResult div").html(str);
-			//
-            //     }
-			//
-			//
-            // });//end getjson
-			//
-            // // 파일 이벤트(섬네일 이미지 보기, 일반파일 다운로드)
-            // $(".uploadResult").on("click", "li", function (e) {
-			//
-            //     console.log("view image");
-			//
-            //     let liObj = $(this);
-			//
-            //     let path = encodeURIComponent(liObj.data("path") + "/" + liObj.data("uuid") + "_" + liObj.data("filename"));
-			//
-            //     if (liObj.data("type")) {
-            //         showImage(path.replace(new RegExp(/\\/g), "/"));
-            //     } else {
-            //         //download
-            //         // self.location = "/board/download?fileName=" + path
-            //         window.location.assign("/board/download?fileName=" + path);
-            //     }
-			//
-			//
-            // });
-			//
-            // function showImage(fileCallPath) {
-			//
-            //     // alert(fileCallPath);
-			//
-            //     $(".bigPictureWrapper").css("display", "flex").show();
-			//
-            //     $(".bigPicture")
-            //         .html("<img src='/board/display?fileName=" + fileCallPath + "' >")
-            //         .animate({width: '100%', height: '100%'}, 1000);
-			//
-            // }
-			//
-            // $(".bigPictureWrapper").on("click", function (e) {
-            //     $(".bigPicture").animate({width: '0%', height: '0%'}, 1000);
-            //     setTimeout(function () {
-            //         $('.bigPictureWrapper').hide();
-            //     }, 1000);
-            // });
+            /* $('#delete_btn').click(function () {
+                if (confirm("게시글을 삭제 하시겠습니까?")) {
+                    var requestUrl = '/board/delete';
+                    var data = {}
+                    data.id = boardId;
+                    data = JSON.stringify(data);
+                    $.ajax({
+                        type: 'post',
+                        url: requestUrl,
+                        data: data,
+                        dataType: 'json',
+                        contentType: 'application/json',
+                        success: function (res) {
+                            console.log("Response Data:", res);
+                            if (res.resCode === 604) {
+                                alert(res.resMsg);
+                                location.replace('/board/list');
+                            } else if (res.resCode === 605) {
+                                alert(res.resMsg);
+                                location.reload();
+                            }
+
+
+                        }, error: function (xhr, e, data) {
+                            console.log("Response Error", data);
+                            alert("에러!!");
+                            window.location.reload(true); // 캐시 제거 후 새 파일 로드 HTTP 200
+                        }
+                    });
+                }
+            });
+            $('#replyWrite_btn').click(function () {
+                // 댓글 유효성 검사
+                let replyContent = $('#replyContent').val();
+                if (replyContent == null || replyContent === "") {
+                    alert("댓글을 입력하세요");
+                    return false;
+                }
+                return replyWrite_btn();
+            });
+
+            //추가
+            // jquery.getJSON(url, data, success) => ajax 간단하게 표현
+            $.getJSON("/board/getAttachList", {boardId: boardId}, function (arr) {
+
+                console.log("arr: ", arr);
+                console.log("arr: ", arr.length);
+
+                let str = "";
+                if (arr.length > 0) {
+                    $(arr).each(function (i, attach) {
+
+                        //image type
+                        if (attach.fileType) {
+                            let fileCallPath = encodeURIComponent(attach.uploadPath + "/s_" + attach.uuid + "_" + attach.fileName);
+
+                            str += "<li data-path='" + attach.uploadPath + "' data-uuid='" + attach.uuid + "' data-filename='" + attach.fileName + "' data-type='" + attach.fileType + "' ><div>";
+                            str += "<img class='rounded' src='/board/display?fileName=" + fileCallPath + "'>";
+                            str += "</div>";
+                            str += "</li>";
+                        } else {
+
+                            str += "<li data-path='" + attach.uploadPath + "' data-uuid='" + attach.uuid + "' data-filename='" + attach.fileName + "' data-type='" + attach.fileType + "' ><div>";
+                            str += "<span> " + attach.fileName + "</span><br/>";
+                            str += "<img src='/resources/images/attach.png'></a>";
+                            str += "</div>";
+                            str += "</li>";
+                        }
+                    });
+
+                    $(".uploadResult ul").html(str);
+                } else {
+                    str += "<span style='color: #A6A6A6'>첨부된 파일이 없습니다.</span>"
+
+                    $(".uploadResult div").html(str);
+
+                }
+
+
+            });//end getjson
+
+            // 파일 이벤트(섬네일 이미지 보기, 일반파일 다운로드)
+            $(".uploadResult").on("click", "li", function (e) {
+
+                console.log("view image");
+
+                let liObj = $(this);
+
+                let path = encodeURIComponent(liObj.data("path") + "/" + liObj.data("uuid") + "_" + liObj.data("filename"));
+
+                if (liObj.data("type")) {
+                    showImage(path.replace(new RegExp(/\\/g), "/"));
+                } else {
+                    //download
+                    // self.location = "/board/download?fileName=" + path
+                    window.location.assign("/board/download?fileName=" + path);
+                }
+
+
+            });
+
+            function showImage(fileCallPath) {
+
+                // alert(fileCallPath);
+
+                $(".bigPictureWrapper").css("display", "flex").show();
+
+                $(".bigPicture")
+                    .html("<img src='/board/display?fileName=" + fileCallPath + "' >")
+                    .animate({width: '100%', height: '100%'}, 1000);
+
+            }
+
+            $(".bigPictureWrapper").on("click", function (e) {
+                $(".bigPicture").animate({width: '0%', height: '0%'}, 1000);
+                setTimeout(function () {
+                    $('.bigPictureWrapper').hide();
+                }, 1000);
+            });
 
         }); //end document ready
 
         // 댓글 쓰기
-/*        function replyWrite_btn() {
+        function replyWrite_btn() {
             let form = $('#boardDetailForm')[0];
             let data = new FormData(form);
             $.ajax({
@@ -322,7 +322,7 @@
             } else {
                 return void (0);
             }
-        }*/
+        } */
     </script>
 </head>
 <body class="body">
@@ -377,15 +377,15 @@
 	</section>
 
 	<%-- 바디: 댓글 --%>
- 	<section>
+<%-- 	<section>
 		<div class="container">
-			<%--<table class="table table-borderless mt-4">
+			<table class="table table-borderless mt-4">
 				<tbody>
 					<tr class="text-left">
 						<th colspan="2">
 							<div class="d-flex justify-content-start">
 								<h5 class="font-weight-bold">
-									&lt;%&ndash;댓글&ndash;%&gt;
+									댓글
 									<c:choose>
 										<c:when test="${boardDetail.replyCnt > 0}">
 											<span class="text-info font-weight-bold" id="replyCnt">${boardDetail.replyCnt}</span>
@@ -399,10 +399,10 @@
 							</div>
 						</th>
 					</tr>
-					&lt;%&ndash;댓글 쓰기&ndash;%&gt;
+					댓글 쓰기
 					<tr class="text-center" id="changeUpdateForm">
 						<form id="boardDetailForm">
-							&lt;%&ndash;게시글 정보 hidden으로 넘기기&ndash;%&gt;
+							게시글 정보 hidden으로 넘기기
 							<input type="hidden" name="boardId" value="${boardDetail.id}">
 							<input type="hidden" name="accountId" value="${sessionScope.account.id}">
 							<input type="hidden" name="replyWriter" value="${sessionScope.account.userNm}">
@@ -420,7 +420,7 @@
 						</form>
 					</tr>
 				</tbody>
-				&lt;%&ndash;댓글 목록&ndash;%&gt;
+				댓글 목록
 				<tbody id="replyList" class="border-top border-bottom">
 					<c:choose>
 						<c:when test="${fn:length(replyList) eq 0 || fn:length(replyList) eq null}">
@@ -440,13 +440,13 @@
 									</th>
 									<th>
 										<c:if test="${sessionScope.account.id eq item.userId}">
-											&lt;%&ndash;드롭다운 시작&ndash;%&gt;
+											드롭다운 시작
 											<div class="dropdown">
 												<button class="float-right btn btn-link" id="dropdownBtn" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 													<img src="${pageContext.request.contextPath}/resources/images/more_vert-black-24dp.svg" alt="U/D icon">
 												</button>
 												<div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownBtn" style="width: 100px">
-													&lt;%&ndash;onclick 사용 시 함수에 여러 파라미터 값을 보낼 때 데이터 타입에 맞게 홑따옴표를 사용해야 함&ndash;%&gt;
+													onclick 사용 시 함수에 여러 파라미터 값을 보낼 때 데이터 타입에 맞게 홑따옴표를 사용해야 함
 													<button class="dropdown-item" type="button"
 														onclick="replyUpdate_form(${item.boardId},${item.replyId},'${item.replyWriter}','${item.replyContent}')">
 														<small>수정</small>
@@ -456,7 +456,7 @@
 													</button>
 												</div>
 											</div>
-											&lt;%&ndash;//드롭다운 끝&ndash;%&gt;
+											//드롭다운 끝
 										</c:if>
 										<div>
 											<span>${item.replyContent}</span>
@@ -470,10 +470,10 @@
 						</c:otherwise>
 					</c:choose>
 				</tbody>
-				&lt;%&ndash;//댓글 목록&ndash;%&gt;
-			</table>--%>
+				//댓글 목록
+			</table>
 
-			<%--게시글 버튼--%>
+			게시글 버튼
 			<div class="d-flex justify-content-end">
 				<div class="mt-2">
 					<c:choose>
@@ -489,11 +489,11 @@
 				</div>
 			</div>
 		</div>
-	</section>
+	</section> --%>
 	<%-- 추가: 파일 원본 이미지 출력--%>
-<%--	<div class="bigPictureWrapper">--%>
-<%--		<div class="bigPicture"></div>--%>
-<%--	</div>--%>
+	<div class="bigPictureWrapper">
+		<div class="bigPicture"></div>
+	</div>
 	<%-- 푸터 --%>
 	<c:import url="/WEB-INF/views/common/footer.jsp" />
 </body>

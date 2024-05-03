@@ -6,44 +6,53 @@
 
 	<select id="selectBoardAllList" resultType="boardVO">
 		SELECT ROW_NUMBER() OVER(ORDER BY id DESC) as no, A.*
-		FROM (SELECT
-				  id
-				, user_id
-				, writer
-				, title
-				, content
-				, view_cnt
-				, reply_cnt
-				, board_type
-				, write_dt
-				, delyn
-				FROM tibero.TBL_BOARD) AS A
-		ORDER BY A.write_dt DESC, A.id DESC;
+		  FROM (SELECT
+			  id
+			 , user_id
+			 , writer
+			 , title
+			 , content
+			 , view_cnt
+			 , reply_cnt
+			 , board_type
+			 , write_dt
+			 , del_yn
+			  FROM TBL_BOARD)  A
+		 ORDER BY A.write_dt DESC, A.id DESC
 	</select>
 
 	<select id="selectBoardDetail" parameterType="integer" resultType="boardVO">
 		SELECT *
-		FROM TIBERO.TBL_BOARD
-		WHERE ID = #{boardId};
+		FROM TBL_BOARD
+		WHERE ID = #{boardId}
 	</select>
 
 	<insert id="insertBoardWrite" parameterType="boardVO">
 
 		<selectKey keyProperty="id" resultType="integer" order="BEFORE">
-			SELECT tibero.TBL_BOARD_SEQ.nextval FROM DUAL;
+			SELECT TBL_BOARD_SEQ.nextval FROM DUAL
 		</selectKey>
-
-		INSERT INTO tibero.TBL_BOARD (ID, USER_ID, WRITER, TITLE, CONTENT, BOARD_TYPE,READ_PERMISSION, WRITE_DT, MODIFY_DT, DELYN)
-		VALUES (
-				#{id}
-				, #{userId}
-				, #{writer}
-				, #{title}
-				, #{content}
-				, #{boardType}
-				, #{readPermission}
-				, sysdate
-				, sysdate
-				, #{delYn})
+		INSERT INTO tbl_board (
+			  id
+			, user_id
+			, writer
+			, title
+			, content
+			, board_type
+			, read_permission
+			, write_dt
+			, modify_dt
+			, del_yn
+		) VALUES (
+			#{id}
+			, #{userId}
+			, #{writer}
+			, #{title}
+			, #{content}
+			, #{boardType}
+			, #{readPermission}
+			, SYSDATE
+			, SYSDATE
+			, #{delYn})
 	</insert>
 </mapper>
